@@ -1,15 +1,4 @@
-The plan is to merge this images:
-
-nextcloud-fpm:latest
-
-mariadb-11:latest
-
-redis:latest
-
-nginx:latest
-
-..and unixsocket enabled by default.
+MariaDB 11 generated from source for alpine imaged
 
 
-[my dockerfiles
-](https://hub.docker.com/repository/docker/soulinferno/syno-nextcloudfpm/general)https://hub.docker.com/repository/docker/soulinferno/syno-nextcloudfpm/general
+https://hub.docker.com/repository/docker/soulinferno/syno-nextcloudfpm/general
