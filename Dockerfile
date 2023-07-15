@@ -1,22 +1,30 @@
 FROM alpine:latest
 
+# define apk source urls
+ARG RLSRC=https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-
+ARG RLVER=11.0.2
+
+# define target path
+ARG TP=/tmp/
+
  LABEL architecture="amd64/x86_64" \
     mariadb-version="11.0.2" \
     alpine-version="latest" \
     build="15-Jul-2023" \
     org.opencontainers.image.description="MariaDB Docker image running on Alpine Linux"
 
+# install necessary dependencies, then download the files generated from source to $TP and install them locally
 RUN apk add --no-cache \
     pwgen \
     wget \
-    && wget https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-common-11.0.2-r0.apk \
-    https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-server-utils-11.0.2-r0.apk \
-    https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-client-11.0.2-r0.apk \
-    https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-11.0.2-r0.apk /tmp/ \
-    https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/mariadb-11/files/run.sh \
+    && wget https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-common-11.0.2-r0.apk "$TP" \
+    https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-server-utils-11.0.2-r0.apk "$TP" \
+    https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-client-11.0.2-r0.apk "$TP" \
+    https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-11.0.2-r0.apk /tmp/ "$TP" \
+    https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/mariadb-11/files/run.sh "$TP" \
     && touch localinstall-empty.list \
     && apk add --repositories-file=localinstall-empty.list --allow-untrusted --no-network --no-cache /tmp/mariadb-*.apk \
-    && rm /tmp/mariadb-*.apk \
+    && rm "$TP"mariadb-*.apk \
     && mkdir /docker-entrypoint-initdb.d \
     /scripts/pre-exec.d \
     /scripts/pre-init.d \
