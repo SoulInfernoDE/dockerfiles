@@ -5,7 +5,8 @@ FROM soulinferno/synonextcloudfpm:mariadb-11
  LABEL architecture="amd64/x86_64" \
     mariadb-version="11.0.2" \
     alpine-version="latest" \
-    build="15-Jul-2023"
+    build="15-Jul-2023" \
+    org.opencontainers.image.description="MariaDB Docker image running on Alpine Linux" \
 
 ADD ./files/apk/* /tmp/ \
     ./files/run.sh /scripts/run.sh
