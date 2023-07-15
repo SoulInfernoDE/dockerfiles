@@ -1,4 +1,8 @@
-The plan is to merge this images: [WORK IN PROGRESS - not functional yet]
+### :no_entry: WORK IN PROGRESS - not functional yet
+
+ _______________________________________________
+
+## The plan is to merge these docker images into one docker container:
 
 nextcloud/fpm-alpine
 
@@ -8,8 +12,9 @@ redis:alpine
 
 nginx:alpine
 
-..and unixsocket enabled by default.
+..and set unixsocket enabled by default.
 
 
-[my dockerfiles
-](https://hub.docker.com/repository/docker/soulinferno/syno-nextcloudfpm/general)https://hub.docker.com/repository/docker/soulinferno/syno-nextcloudfpm/general
+__________________________
+
+https://hub.docker.com/r/soulinferno/syno-nextcloudfpm
