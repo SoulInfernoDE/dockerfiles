@@ -24,7 +24,7 @@ RUN apk add --no-cache \
     https://github.com/SoulInfernoDE/dockerfiles/releases/download/alpine-11.0.2/mariadb-11.0.2-r0.apk \
     https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/mariadb-11/files/run.sh \
     && touch localinstall-empty.list \
-    && apk add --repositories-file=localinstall-empty.list --allow-untrusted --no-network --no-cache "$TP"mariadb-*.apk \
+    && apk add --no-cache "$TP"mariadb-*.apk \
     && rm "$TP"mariadb-*.apk \
     && mkdir /docker-entrypoint-initdb.d \
     /scripts/pre-exec.d \
