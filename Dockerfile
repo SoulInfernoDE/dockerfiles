@@ -2,10 +2,10 @@ FROM alpine:latest
 
 FROM soulinferno/synonextcloudfpm:mariadb-11
 
-LABEL architecture="amd64/x86_64" \
-    mariadb-version="11.0.2" \
-    alpine-version="latest" \
-    build="15-Jul-2023"
+# LABEL architecture="amd64/x86_64" \
+#    mariadb-version="11.0.2" \
+#    alpine-version="latest" \
+#    build="15-Jul-2023"
 
 COPY files/apk/* /tmp/ \
      files/run.sh /scripts/run.sh
