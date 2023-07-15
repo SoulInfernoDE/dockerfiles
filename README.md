@@ -1,12 +1,12 @@
-The plan is to merge this images:
+The plan is to merge this images: [WORK IN PROGRESS - not functional yet]
 
-nextcloud-fpm:latest
+nextcloud/fpm-alpine
 
-mariadb-11:latest
+mariadb-11:alpine
 
-redis:latest
+redis:alpine
 
-nginx:latest
+nginx:alpine
 
 ..and unixsocket enabled by default.
 
