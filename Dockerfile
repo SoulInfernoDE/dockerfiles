@@ -31,8 +31,7 @@ RUN apk add --no-cache \
     && apk add --no-cache --allow-untrusted "$TP"mariadb-*.apk \
     && rm "$TP"mariadb-*.apk \
     && mkdir /docker-entrypoint-initdb.d/ \
-    && mkdir /scripts/pre-exec.d/ \
-    && mkdir /scripts/pre-init.d/ \
+    && mkdir -p /scripts/{pre-exec.d,pre-init.d} \
     && chmod -R 755 /scripts
     
 EXPOSE 3306
