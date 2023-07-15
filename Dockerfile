@@ -20,7 +20,7 @@ RUN apk add --no-cache \
     && mkdir /docker-entrypoint-initdb.d \
     /scripts/pre-exec.d \
     /scripts/pre-init.d \
-    chmod -R 755 /scripts \
+    && chmod -R 755 /scripts \
     
 EXPOSE 3306
 
