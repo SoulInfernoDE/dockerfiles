@@ -20,9 +20,9 @@ ARG TP=/tmp/
 RUN apk add --no-cache \
     pwgen \
     wget \
-    && wget -P $TP \
+    && wget -nvP $TP \
     $RLSRC$RLVER/mariadb-common-$RLVER$FE \
-    $RLSRC$RLVER/mariadb-common-$RLVER/mariadb-server-utils-$RLVER$FE \
+    $RLSRC$RLVER/mariadb-server-utils-$RLVER$FE \
     $RLSRC$RLVER/mariadb-client-$RLVER$FE \
     $RLSRC$RLVER/mariadb-$RLVER$FE \
     
