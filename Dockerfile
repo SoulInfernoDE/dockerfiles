@@ -63,7 +63,7 @@ RUN set -eux; \
 	wget \
     ; \
     \
-    rm /var/spool/cron/crontabs/root; \
+#    rm /var/spool/cron/crontabs/root; \
     echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data \
     ; \
     \
