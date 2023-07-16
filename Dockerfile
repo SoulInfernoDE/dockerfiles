@@ -1,8 +1,17 @@
 FROM nextcloud:fpm-alpine
 
+# Nextcloud env
 ENV PHP_MEMORY_LIMIT 513M
 ENV PHP_UPLOAD_LIMIT 20G
 ENV NEXTCLOUD_VERSION 27.0.0
+
+# REDIS env
+ENV REDIS_VERSION 7.0.12
+ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-7.0.12.tar.gz
+ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
+
+# volumes
+VOLUME /var/www/html
 
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 # FROM php:8.2-fpm-alpine3.18
@@ -14,6 +23,11 @@ RUN set -eux; \
     apk add --no-cache \
         imagemagick \
         rsync \
+# grab su-exec for easy step-down from root
+	'su-exec>=0.2' \
+# add tzdata for https://github.com/docker-library/redis/issues/138
+	tzdata \
+
     ; \
     \
     apk add --no-cache --virtual .build-deps \
@@ -34,6 +48,18 @@ RUN set -eux; \
         openldap-dev \
         pcre-dev \
         postgresql-dev \
+	coreutils \
+	dpkg-dev dpkg \
+	gcc \
+	linux-headers \
+	make \
+	musl-dev \
+	openssl-dev \
+# install real "wget" to avoid:
+#   + wget -O redis.tar.gz https://download.redis.io/releases/redis-6.0.6.tar.gz
+#   Connecting to download.redis.io (45.60.121.1:80)
+#   wget: bad header line:     XxhODalH: btu; path=/; Max-Age=900
+	wget \
     ; \
     \
     rm /var/spool/cron/crontabs/root; \
@@ -114,9 +140,8 @@ RUN set -eux; \
              /docker-entrypoint-hooks.d/post-upgrade \
              /docker-entrypoint-hooks.d/before-starting; \
     chown -R www-data:root /var/www; \
-    chmod -R g=u /var/www;
-
-VOLUME /var/www/html
+    chmod -R g=u /var/www \
+    ; \
     \
     apk add --no-cache --virtual .fetch-deps \
         bzip2 \
@@ -153,35 +178,7 @@ COPY config/* /usr/src/nextcloud/config/
 # RUN addgroup -S -g 1000 redis \
 #    adduser -S -G redis -u 999 redis
 # alpine already has a gid 999, so we'll use the next id
-    ; \
-    \
-    apk add --no-cache \
-# grab su-exec for easy step-down from root
-		'su-exec>=0.2' \
-# add tzdata for https://github.com/docker-library/redis/issues/138
-		tzdata \
-
-ENV REDIS_VERSION 7.0.12
-ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-7.0.12.tar.gz
-ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
-    ; \
-    \
-    apk add --no-cache --virtual .build-deps \
-		coreutils \
-		dpkg-dev dpkg \
-		gcc \
-		linux-headers \
-		make \
-		musl-dev \
-		openssl-dev \
-# install real "wget" to avoid:
-#   + wget -O redis.tar.gz https://download.redis.io/releases/redis-6.0.6.tar.gz
-#   Connecting to download.redis.io (45.60.121.1:80)
-#   wget: bad header line:     XxhODalH: btu; path=/; Max-Age=900
-		wget \
-	; \
-	\
-	wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
+RUN	wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
 	echo "$REDIS_DOWNLOAD_SHA *redis.tar.gz" | sha256sum -c -; \
 	mkdir -p /usr/src/redis; \
 	tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1; \
