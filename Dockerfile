@@ -56,11 +56,11 @@ RUN set -eux; \
 	make \
 	musl-dev \
 	openssl-dev \
+ 	wget \
 # install real "wget" to avoid:
 #   + wget -O redis.tar.gz https://download.redis.io/releases/redis-6.0.6.tar.gz
 #   Connecting to download.redis.io (45.60.121.1:80)
 #   wget: bad header line:     XxhODalH: btu; path=/; Max-Age=900
-	wget \
     ; \
     \
 #    rm /var/spool/cron/crontabs/root; \
@@ -106,8 +106,7 @@ RUN set -eux; \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
     )"; \
-    apk add --no-network --virtual .nextcloud-phpext-rundeps $runDeps; \
-    apk del --no-network .build-deps \
+    apk add --no-network --virtual .nextcloud-phpext-rundeps $runDeps \
 
 # install the PHP extensions we need
 # see https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html
@@ -161,10 +160,9 @@ RUN set -eux; \
     rm -rf "$GNUPGHOME" /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
-    chmod +x /usr/src/nextcloud/occ; \
-    apk del --no-network .fetch-deps
+    chmod +x /usr/src/nextcloud/occ
 
-# COPY *.sh upgrade.exclude /
+COPY *.sh upgrade.exclude /
 COPY config/* /usr/src/nextcloud/config/
 
 # ENTRYPOINT ["/entrypoint.sh"]
@@ -235,6 +233,8 @@ RUN	wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
 	)"; \
 	apk add --no-network --virtual .redis-rundeps $runDeps; \
 	apk del --no-network .build-deps; \
+	apk del --no-network .fetch-deps; \
+        ; \
 	\
 	redis-cli --version; \
 	redis-server --version
