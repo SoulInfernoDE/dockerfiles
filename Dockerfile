@@ -114,10 +114,9 @@ RUN set -eux; \
              /docker-entrypoint-hooks.d/post-upgrade \
              /docker-entrypoint-hooks.d/before-starting; \
     chown -R www-data:root /var/www; \
-    chmod -R g=u /var/www
+    chmod -R g=u /var/www;
 
 VOLUME /var/www/html
-    ; \
     \
     apk add --no-cache --virtual .fetch-deps \
         bzip2 \
