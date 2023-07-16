@@ -17,9 +17,9 @@ RUN set -ex; \
     ; \
     \
     rm /var/spool/cron/crontabs/root; \
-    echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data
+    echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;
 # removing run layers to slim down image size
-    && apk add --no-cache --virtual .build-deps \
+    apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
         autoconf \
         freetype-dev \
