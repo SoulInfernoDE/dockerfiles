@@ -17,9 +17,9 @@ RUN set -ex; \
     ; \
     \
     rm /var/spool/cron/crontabs/root; \
-    echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data
+    echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;
 # removing run layers to slim down image size
-   && set -ex; \
+   set -ex; \
     \
     apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
@@ -79,13 +79,13 @@ RUN set -ex; \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
     )"; \
     apk add --no-network --virtual .nextcloud-phpext-rundeps $runDeps; \
-    apk del --no-network .build-deps
+    apk del --no-network .build-deps;
 
 # install the PHP extensions we need
 # see https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html
 # set recommended PHP.ini settings
 # see https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#enable-php-opcache
-   && { \
+      { \
         echo 'opcache.enable=1'; \
         echo 'opcache.interned_strings_buffer=32'; \
         echo 'opcache.max_accelerated_files=10000'; \
@@ -111,11 +111,11 @@ RUN set -ex; \
              /docker-entrypoint-hooks.d/post-upgrade \
              /docker-entrypoint-hooks.d/before-starting; \
     chown -R www-data:root /var/www; \
-    chmod -R g=u /var/www
+    chmod -R g=u /var/www;
 
 VOLUME /var/www/html
 
-    && set -ex; \
+       set -ex; \
     apk add --no-cache --virtual .fetch-deps \
         bzip2 \
         gnupg \
@@ -134,7 +134,7 @@ VOLUME /var/www/html
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ; \
-    apk del --no-network .fetch-deps
+    apk del --no-network .fetch-deps;
 
 COPY *.sh upgrade.exclude /
 COPY config/* /usr/src/nextcloud/config/
@@ -152,17 +152,17 @@ COPY config/* /usr/src/nextcloud/config/
 #    adduser -S -G redis -u 999 redis
 # alpine already has a gid 999, so we'll use the next id
 
-   && apk add --no-cache \
+    apk add --no-cache \
 # grab su-exec for easy step-down from root
 		'su-exec>=0.2' \
 # add tzdata for https://github.com/docker-library/redis/issues/138
-		tzdata
+		tzdata;
 
 ENV REDIS_VERSION 7.0.12
 ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-7.0.12.tar.gz
 ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
 
-    && set -eux; \
+       set -eux; \
 	\
 	apk add --no-cache --virtual .build-deps \
 		coreutils \
