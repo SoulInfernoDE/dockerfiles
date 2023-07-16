@@ -98,6 +98,7 @@ RUN set -eux; \
         memcached \
         redis \
     ; \
+    mkdir /tmp/pear; \
     rm -r /tmp/pear; \
     \
     runDeps="$( \
