@@ -10,9 +10,10 @@ ENV REDIS_VERSION 7.0.12
 ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-7.0.12.tar.gz
 ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
 
-# volumes
+# volumes for Nextcloud
 VOLUME /var/www/html
-
+# volumes for redis
+VOLUME /data
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 # FROM php:8.2-fpm-alpine3.18
 # One Alpine base image layer should be enough and choosing the base of the nextcloud one seems to be reasonable for all others
@@ -148,8 +149,8 @@ RUN set -eux; \
         gnupg \
     ; \
     \
-    curl -fsSL -o nextcloud.tar.bz2 "https://download.nextcloud.com/server/releases/nextcloud-27.0.0.tar.bz2"; \
-    curl -fsSL -o nextcloud.tar.bz2.asc "https://download.nextcloud.com/server/releases/nextcloud-27.0.0.tar.bz2.asc"; \
+    curl -fsSL -o nextcloud.tar.bz2 "https://download.nextcloud.com/server/releases/latest-27.tar.bz2"; \
+    curl -fsSL -o nextcloud.tar.bz2.asc "https://download.nextcloud.com/server/releases/latest-27.tar.bz2.asc"; \
     export GNUPGHOME="$(mktemp -d)"; \
 # gpg key from https://nextcloud.com/nextcloud.asc
     gpg --batch --keyserver keyserver.ubuntu.com  --recv-keys 28806A878AE423A28372792ED75899B9A724937A; \
@@ -163,7 +164,7 @@ RUN set -eux; \
     chmod +x /usr/src/nextcloud/occ; \
     apk del --no-network .fetch-deps
 
-COPY *.sh upgrade.exclude /
+# COPY *.sh upgrade.exclude /
 COPY config/* /usr/src/nextcloud/config/
 
 # ENTRYPOINT ["/entrypoint.sh"]
@@ -240,7 +241,6 @@ RUN	wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
 
 # RUN mkdir /data \
 RUN chown redis:redis /data
-VOLUME /data
 WORKDIR /data
 
 # COPY docker-entrypoint.sh /usr/local/bin/
