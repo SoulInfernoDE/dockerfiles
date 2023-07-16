@@ -73,14 +73,14 @@ RUN set -eux; \
     docker-php-ext-configure ldap; \
     docker-php-ext-install -j "$(nproc)" \
         bcmath \
-        exif \
+#        exif \
         gd \
-        gmp \
+#       gmp \
         intl \
 #        ldap \
         opcache \
-        pcntl \
-        pdo_mysql \
+#        pcntl \
+#        pdo_mysql \
         pdo_pgsql \
 #        sysvsem \
 #        zip \
@@ -133,8 +133,9 @@ RUN set -eux; \
         echo 'upload_max_filesize=${PHP_UPLOAD_LIMIT}'; \
         echo 'post_max_size=${PHP_UPLOAD_LIMIT}'; \
     } > "${PHP_INI_DIR}/conf.d/nextcloud.ini"; \
+    ; \
     \
-    mkdir /var/www/data; \
+#    mkdir /var/www/data; \
     mkdir -p /docker-entrypoint-hooks.d/pre-installation \
              /docker-entrypoint-hooks.d/post-installation \
              /docker-entrypoint-hooks.d/pre-upgrade \
