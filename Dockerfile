@@ -1,8 +1,14 @@
 FROM nextcloud:fpm-alpine
-# DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
-FROM php:8.2-fpm-alpine3.18
 
+ENV PHP_MEMORY_LIMIT 513M
+ENV PHP_UPLOAD_LIMIT 20G
+ENV NEXTCLOUD_VERSION 27.0.0
+
+# DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
+# FROM php:8.2-fpm-alpine3.18
+# One Alpine base image layer should be enough and choosing the base of the nextcloud one seems to be reasonable for all others
 # entrypoint.sh and cron.sh dependencies
+
 RUN set -ex; \
     \
     apk add --no-cache \
@@ -12,10 +18,8 @@ RUN set -ex; \
     \
     rm /var/spool/cron/crontabs/root; \
     echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data
-
-# install the PHP extensions we need
-# see https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html
-RUN set -ex; \
+# removing run layers to slim down image size
+   && set -ex; \
     \
     apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
@@ -77,11 +81,11 @@ RUN set -ex; \
     apk add --no-network --virtual .nextcloud-phpext-rundeps $runDeps; \
     apk del --no-network .build-deps
 
+# install the PHP extensions we need
+# see https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html
 # set recommended PHP.ini settings
 # see https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#enable-php-opcache
-ENV PHP_MEMORY_LIMIT 513M
-ENV PHP_UPLOAD_LIMIT 20G
-RUN { \
+   && { \
         echo 'opcache.enable=1'; \
         echo 'opcache.interned_strings_buffer=32'; \
         echo 'opcache.max_accelerated_files=10000'; \
@@ -111,10 +115,7 @@ RUN { \
 
 VOLUME /var/www/html
 
-
-ENV NEXTCLOUD_VERSION 27.0.0
-
-RUN set -ex; \
+    && set -ex; \
     apk add --no-cache --virtual .fetch-deps \
         bzip2 \
         gnupg \
@@ -145,13 +146,13 @@ COPY config/* /usr/src/nextcloud/config/
 # FROM mariadb:11.0.2
 
 
-FROM redis:alpine
+# FROM redis:alpine but using nextcloud alpine base image
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 # RUN addgroup -S -g 1000 redis \
 #    adduser -S -G redis -u 999 redis
 # alpine already has a gid 999, so we'll use the next id
 
-RUN apk add --no-cache \
+   && apk add --no-cache \
 # grab su-exec for easy step-down from root
 		'su-exec>=0.2' \
 # add tzdata for https://github.com/docker-library/redis/issues/138
@@ -161,7 +162,7 @@ ENV REDIS_VERSION 7.0.12
 ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-7.0.12.tar.gz
 ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
 
-RUN set -eux; \
+    && set -eux; \
 	\
 	apk add --no-cache --virtual .build-deps \
 		coreutils \
