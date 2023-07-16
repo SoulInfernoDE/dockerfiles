@@ -160,9 +160,10 @@ RUN set -eux; \
     rm -rf "$GNUPGHOME" /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
+#    mkdir /upgrade.exclude; \
     chmod +x /usr/src/nextcloud/occ
 
-COPY *.sh upgrade.exclude /
+COPY *.sh upgrade.exclude/
 COPY config/* /usr/src/nextcloud/config/
 
 # ENTRYPOINT ["/entrypoint.sh"]
