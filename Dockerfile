@@ -4,6 +4,7 @@ FROM nextcloud:fpm-alpine
 ENV PHP_MEMORY_LIMIT 513M
 ENV PHP_UPLOAD_LIMIT 20G
 ENV NEXTCLOUD_VERSION 27.0.0
+ENV NEXTCLOUD_FILE=latest-27.tar.bz2
 
 # REDIS env
 ENV REDIS_VERSION 7.0.12
@@ -25,9 +26,9 @@ RUN set -eux; \
         imagemagick \
         rsync \
 # grab su-exec for easy step-down from root
-	'su-exec>=0.2' \
+	    'su-exec>=0.2' \
 # add tzdata for https://github.com/docker-library/redis/issues/138
-	tzdata \
+	    tzdata \
 
     ; \
     \
@@ -49,14 +50,14 @@ RUN set -eux; \
         openldap-dev \
         pcre-dev \
         postgresql-dev \
-	coreutils \
-	dpkg-dev dpkg \
-	gcc \
-	linux-headers \
-	make \
-	musl-dev \
-	openssl-dev \
- 	wget \
+	    coreutils \
+	    dpkg-dev dpkg \
+	    gcc \
+	    linux-headers \
+	    make \
+	    musl-dev \
+	    openssl-dev \
+ 	    wget \
 # install real "wget" to avoid:
 #   + wget -O redis.tar.gz https://download.redis.io/releases/redis-6.0.6.tar.gz
 #   Connecting to download.redis.io (45.60.121.1:80)
@@ -73,17 +74,17 @@ RUN set -eux; \
     docker-php-ext-configure ldap; \
     docker-php-ext-install -j "$(nproc)" \
         bcmath \
-#        exif \
+        exif \
         gd \
-#       gmp \
+       gmp \
         intl \
-#        ldap \
+        ldap \
         opcache \
-#        pcntl \
-#        pdo_mysql \
+        pcntl \
+        pdo_mysql \
         pdo_pgsql \
-#        sysvsem \
-#        zip \
+        sysvsem \
+        zip \
     ; \
     \
 # pecl will claim success even if one install fails, so we need to perform each install separately
@@ -150,18 +151,19 @@ RUN set -eux; \
         gnupg \
     ; \
     \
-    curl -fsSL -o nextcloud.tar.bz2 "https://download.nextcloud.com/server/releases/latest-27.tar.bz2"; \
-    curl -fsSL -o nextcloud.tar.bz2.asc "https://download.nextcloud.com/server/releases/latest-27.tar.bz2.asc"; \
+    curl -fsSL -o nextcloud.tar.bz2 "https://download.nextcloud.com/server/releases/${NEXTCLOUD_FILE}"; \
+    curl -fsSL -o nextcloud.tar.bz2.asc "https://download.nextcloud.com/server/releases/${NEXTCLOUD_FILE}.asc"; \
     export GNUPGHOME="$(mktemp -d)"; \
 # gpg key from https://nextcloud.com/nextcloud.asc
     gpg --batch --keyserver keyserver.ubuntu.com  --recv-keys 28806A878AE423A28372792ED75899B9A724937A; \
     gpg --batch --verify nextcloud.tar.bz2.asc nextcloud.tar.bz2; \
+    mkdir -p /usr/src/; \    
     tar -xjf nextcloud.tar.bz2 -C /usr/src/; \
     gpgconf --kill all; \
     rm nextcloud.tar.bz2.asc nextcloud.tar.bz2; \
     rm -rf "$GNUPGHOME" /usr/src/nextcloud/updater; \
-    mkdir -p /usr/src/nextcloud/data; \
-    mkdir -p /usr/src/nextcloud/custom_apps; \
+#    mkdir -p /usr/src/nextcloud/data; \
+#    mkdir -p /usr/src/nextcloud/custom_apps; \
 #    mkdir /upgrade.exclude; \
     chmod +x /usr/src/nextcloud/occ
 
