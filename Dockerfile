@@ -166,10 +166,10 @@ RUN set -eux; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ; \
 #   pull .sh files from original nextcloud docker github repo
-    wget https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude /; \
-    wget -O entrypoint-nextcloud.sh https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/entrypoint.sh /; \
-    wget -O cron.sh https://raw.githubusercontent.com/nextcloud/docker/master/docker-cron.sh /; \
-    wget https://raw.githubusercontent.com/nextcloud/docker/master/update.sh /; \
+    wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
+    wget -O /entrypoint-nextcloud.sh https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/entrypoint.sh; \
+    wget -O /cron.sh https://raw.githubusercontent.com/nextcloud/docker/master/docker-cron.sh; \
+    wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/update.sh; \
 #    wget https://github.com/nextcloud/docker/tree/1b913eb0e9e6106c5ab58c8a0b1b01caeaab2ffa/27/fpm-alpine/config; \
 # pulling the config folder files from original nextcloud docker github repo
     mkdir /config; \
