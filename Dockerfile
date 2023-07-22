@@ -164,8 +164,11 @@ RUN set -eux; \
     rm -rf "$GNUPGHOME" /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
-#    mkdir /upgrade.exclude; \
-    chmod +x /usr/src/nextcloud/occ
+    chmod +x /usr/src/nextcloud/occ; \
+#   pull .sh files from original nextcloud docker github repo
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/entrypoint.sh ./entrypoint-nextcloud.sh; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/docker-cron.sh ./cron.sh
 
 COPY /entrypoint.sh entrypoint-nextcloud.sh
 COPY *.sh upgrade.exclude /
