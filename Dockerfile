@@ -22,6 +22,7 @@ VOLUME /data
 
 RUN set -eux; \
     \
+    wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
     apk add --no-cache \
         imagemagick \
         rsync \
@@ -57,8 +58,7 @@ RUN set -eux; \
 	    linux-headers \
 	    make \
 	    musl-dev \
-	    openssl-dev; \
-        wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude \
+	    openssl-dev \
 # install real "wget" to avoid:
 #   + wget -O redis.tar.gz https://download.redis.io/releases/redis-6.0.6.tar.gz
 #   Connecting to download.redis.io (45.60.121.1:80)
