@@ -3,8 +3,8 @@ FROM nextcloud:fpm-alpine
 # Nextcloud env
 ENV PHP_MEMORY_LIMIT 513M
 ENV PHP_UPLOAD_LIMIT 20G
-ENV NEXTCLOUD_VERSION 27.0.0
-ENV NEXTCLOUD_FILE=latest-27.tar.bz2
+ENV NEXTCLOUD_VERSION 27.0.1
+
 
 # REDIS env
 ENV REDIS_VERSION 7.0.12
@@ -151,8 +151,8 @@ RUN set -eux; \
         gnupg \
     ; \
     \
-    curl -fsSL -o nextcloud.tar.bz2 "https://download.nextcloud.com/server/releases/${NEXTCLOUD_FILE}"; \
-    curl -fsSL -o nextcloud.tar.bz2.asc "https://download.nextcloud.com/server/releases/${NEXTCLOUD_FILE}.asc"; \
+    curl -fsSL -o nextcloud.tar.bz2 "https://download.nextcloud.com/server/releases/latest-27.tar.bz2"; \
+    curl -fsSL -o nextcloud.tar.bz2.asc "https://download.nextcloud.com/server/releases/latest-27.tar.bz2.asc"; \
     export GNUPGHOME="$(mktemp -d)"; \
 # gpg key from https://nextcloud.com/nextcloud.asc
     gpg --batch --keyserver keyserver.ubuntu.com  --recv-keys 28806A878AE423A28372792ED75899B9A724937A; \
@@ -162,16 +162,18 @@ RUN set -eux; \
     gpgconf --kill all; \
     rm nextcloud.tar.bz2.asc nextcloud.tar.bz2; \
     rm -rf "$GNUPGHOME" /usr/src/nextcloud/updater; \
-#    mkdir -p /usr/src/nextcloud/data; \
-#    mkdir -p /usr/src/nextcloud/custom_apps; \
+    mkdir -p /usr/src/nextcloud/data; \
+    mkdir -p /usr/src/nextcloud/custom_apps; \
 #    mkdir /upgrade.exclude; \
     chmod +x /usr/src/nextcloud/occ
 
-COPY *.sh upgrade.exclude/
+COPY /entrypoint.sh entrypoint-nextcloud.sh
+rm /entrypoint.sh
+COPY *.sh upgrade.exclude /
 COPY config/* /usr/src/nextcloud/config/
 
-# ENTRYPOINT ["/entrypoint.sh"]
-# CMD ["php-fpm"]
+ENTRYPOINT ["/entrypoint-nextcloud.sh"]
+CMD ["php-fpm"]
 
 
 # FROM mariadb:11.0.2
