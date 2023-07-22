@@ -1,5 +1,5 @@
 FROM nextcloud:fpm-alpine
-
+ADD https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude
 # Nextcloud env
 ENV PHP_MEMORY_LIMIT 513M
 ENV PHP_UPLOAD_LIMIT 20G
@@ -22,7 +22,6 @@ VOLUME /data
 
 RUN set -eux; \
     \
-    wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
     apk add --no-cache \
         imagemagick \
         rsync \
