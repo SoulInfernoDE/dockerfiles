@@ -168,9 +168,20 @@ RUN set -eux; \
 #   pull .sh files from original nextcloud docker github repo
     wget https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
     wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/entrypoint.sh ./entrypoint-nextcloud.sh; \
-    wget https://raw.githubusercontent.com/nextcloud/docker/master/docker-cron.sh ./cron.sh
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/docker-cron.sh ./cron.sh; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/update.sh ./update.sh; \
+    wget https://github.com/nextcloud/docker/tree/1b913eb0e9e6106c5ab58c8a0b1b01caeaab2ffa/27/fpm-alpine/config; \
+# pulling the config folder files from original nextcloud docker github repo
+    mkdir /config; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/apcu.config.php /config/; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/apps.config.php /config/; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/autoconfig.php /config/; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/redis.config.php /config/; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/reverse-proxy.config.php /config/; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/s3.config.php /config/; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/smtp.config.php /config/; \
+    wget https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/swift.config.php /config/ \
 
-COPY /entrypoint.sh entrypoint-nextcloud.sh
 COPY *.sh upgrade.exclude /
 COPY config/* /usr/src/nextcloud/config/
 
