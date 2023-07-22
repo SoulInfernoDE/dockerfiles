@@ -11,10 +11,9 @@ ENV REDIS_VERSION 7.0.12
 ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-7.0.12.tar.gz
 ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
 
-# volumes for Nextcloud
-VOLUME /var/www/html
-# volumes for redis
-VOLUME /data
+# volumes for Nextcloud and redis
+VOLUME /var/www/html /redis
+
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 # FROM php:8.2-fpm-alpine3.18
 # One Alpine base image layer should be enough and choosing the base of the nextcloud one seems to be reasonable for all others
