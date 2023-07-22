@@ -29,6 +29,7 @@ RUN set -eux; \
 	    'su-exec>=0.2' \
 # add tzdata for https://github.com/docker-library/redis/issues/138
 	    tzdata \
+        wget \
 
     ; \
     \
@@ -56,8 +57,8 @@ RUN set -eux; \
 	    linux-headers \
 	    make \
 	    musl-dev \
-	    openssl-dev \
- 	    wget \
+	    openssl-dev; \
+        wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude \
 # install real "wget" to avoid:
 #   + wget -O redis.tar.gz https://download.redis.io/releases/redis-6.0.6.tar.gz
 #   Connecting to download.redis.io (45.60.121.1:80)
@@ -166,7 +167,6 @@ RUN set -eux; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ; \
 #   pull .sh files from original nextcloud docker github repo
-    wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
     wget -O /entrypoint-nextcloud.sh https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/entrypoint.sh; \
     wget -O /cron.sh https://raw.githubusercontent.com/nextcloud/docker/master/docker-cron.sh; \
     wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/update.sh; \
