@@ -182,7 +182,7 @@ RUN set -eux; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/smtp.config.php; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/swift.config.php
 
-COPY *.sh upgrade.exclude /
+COPY *.sh /upgrade.exclude /.
 COPY config/* /usr/src/nextcloud/config/
 
 ENTRYPOINT ["/entrypoint-nextcloud.sh"]
