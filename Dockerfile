@@ -168,7 +168,6 @@ RUN set -eux; \
     chmod +x /usr/src/nextcloud/occ
 
 COPY /entrypoint.sh entrypoint-nextcloud.sh
-rm /entrypoint.sh
 COPY *.sh upgrade.exclude /
 COPY config/* /usr/src/nextcloud/config/
 
