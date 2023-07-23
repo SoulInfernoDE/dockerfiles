@@ -276,8 +276,6 @@ if expr "$1" : "apache" 1>/dev/null || [ "$1" = "php-fpm" ] || [ "${NEXTCLOUD_UP
     run_path before-starting
 fi
 
-exec "$@"
-
 set -e
 
 # first arg is `-f` or `--some-option`
