@@ -271,7 +271,7 @@ RUN set -eux; \
 # WORKDIR /data
 
 # COPY docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["/bin/sh", "-c" , "/usr/local/bin/merged-entrypoint.sh && php-fpm"]
+ENTRYPOINT ["/bin/sh", "-c" , "/usr/local/bin/redis-entrypoint.sh && /usr/local/bin/nextcloud-entrypoint.sh"]
 # ENTRYPOINT ["merged-entrypoint.sh"]
 # CMD ["php-fpm", "redis-server"]
 
