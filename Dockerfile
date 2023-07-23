@@ -33,6 +33,7 @@ RUN set -eux; \
     ; \
 # pulling upgrade.exclude file from original nextcloud repo
     wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
+    wget -P / https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/syno-nextcloudfpm/merged-entrypoint.sh; \
     \
     apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
@@ -267,7 +268,7 @@ RUN set -eux; \
 
 # COPY docker-entrypoint.sh /usr/local/bin/
 
-ENTRYPOINT ["/nextcloud-entrypoint.sh", "redis-entrypoint.sh"]
+ENTRYPOINT ["/merged-entrypoint.sh"]
 CMD ["php-fpm", "redis-server"]
 
 # ENTRYPOINT ["redis-entrypoint.sh"]
