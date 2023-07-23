@@ -145,8 +145,8 @@ RUN set -eux; \
              /docker-entrypoint-hooks.d/pre-upgrade \
              /docker-entrypoint-hooks.d/post-upgrade \
              /docker-entrypoint-hooks.d/before-starting; \
-    wget -P /docker-entrypoint-hooks.d/pre-installation https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/syno-nextcloudfpm/merged-entrypoint.sh; \
-    chmod +x /docker-entrypoint-hooks.d/pre-installation/merged-entrypoint.sh; \
+    wget -P /docker-entrypoint-hooks.d/before-starting https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/syno-nextcloudfpm/merged-entrypoint.sh; \
+    chmod +x /docker-entrypoint-hooks.d/before-starting/merged-entrypoint.sh; \
     chown -R www-data:root /var/www; \
     chmod -R g=u /var/www \
     ; \
