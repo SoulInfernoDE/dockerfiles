@@ -178,11 +178,13 @@ RUN set -eux; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/reverse-proxy.config.php; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/s3.config.php; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/smtp.config.php; \
-    wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/swift.config.php
+    wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/swift.config.php; \
+    cp -R /config/* /usr/src/nextcloud/config/
 
 # the following line has been replaced by the downloads from original repo
 # COPY *.sh upgrade.exclude /
-COPY /config/* /usr/src/nextcloud/config/
+# using internal cp instead of COPY arg
+#COPY /config/* /usr/src/nextcloud/config/
 
 ENTRYPOINT ["/entrypoint-nextcloud.sh"]
 CMD ["php-fpm"]
