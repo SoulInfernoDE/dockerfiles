@@ -35,7 +35,7 @@ RUN set -eux; \
     ; \
 # pulling upgrade.exclude file from original nextcloud repo
     wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
-    wget -P /usr/local/bin/merged-entrypoint.sh https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/syno-nextcloudfpm/merged-entrypoint.sh; \
+    wget -P /usr/local/bin/ https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/syno-nextcloudfpm/merged-entrypoint.sh; \
     chmod +x /usr/local/bin/merged-entrypoint.sh; \
     \
     apk add --no-cache --virtual .build-deps \
