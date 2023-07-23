@@ -35,7 +35,7 @@ RUN set -eux; \
     ; \
 # pulling upgrade.exclude file from original nextcloud repo
     wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
-# This line is to change to NOCACHE BUILD
+# This line is to change to NOCACHE BUILD.1
     wget -P /usr/local/bin/ https://raw.githubusercontent.com/SoulInfernoDE/dockerfiles/syno-nextcloudfpm/merged-entrypoint.sh; \
     chmod +x /usr/local/bin/merged-entrypoint.sh; \
     \
