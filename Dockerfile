@@ -163,7 +163,7 @@ RUN set -eux; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ; \
 #   pull .sh files from original nextcloud docker github repo
-    wget -O /entrypoint-nextcloud.sh https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/entrypoint.sh; \
+    wget -O /nextcloud-entrypoint.sh https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/entrypoint.sh; \
     wget -O /cron.sh https://raw.githubusercontent.com/nextcloud/docker/master/docker-cron.sh; \
     wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/update.sh; \
 #    wget https://github.com/nextcloud/docker/tree/1b913eb0e9e6106c5ab58c8a0b1b01caeaab2ffa/27/fpm-alpine/config; \
@@ -177,14 +177,15 @@ RUN set -eux; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/s3.config.php; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/smtp.config.php; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/swift.config.php; \
-    cp -R /config/* /usr/src/nextcloud/config/
+    cp -R /config/* /usr/src/nextcloud/config/; \
+    chmod +x /*.sh
 
 # the following line has been replaced by the downloads from original repo
 # COPY *.sh upgrade.exclude /
 # using internal cp instead of COPY arg
 # COPY /config/* /usr/src/nextcloud/config/
 
-ENTRYPOINT ["/entrypoint-nextcloud.sh"]
+ENTRYPOINT ["/nextcloud-entrypoint.sh"]
 CMD ["php-fpm"]
 
 
@@ -193,10 +194,11 @@ CMD ["php-fpm"]
 
 # FROM redis:alpine but using nextcloud alpine base image
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-# RUN addgroup -S -g 1000 redis \
-#    adduser -S -G redis -u 999 redis
 # alpine already has a gid 999, so we'll use the next id
-RUN	wget -O /usr/local/bin/redis-entrypoint.sh https://raw.githubusercontent.com/docker-library/redis/master/7.0/alpine/docker-entrypoint.sh; \
+RUN	addgroup -S -g 1001 redis; \
+    adduser -S -G redis -u 1000 redis; \
+    wget -O /usr/local/bin/redis-entrypoint.sh https://raw.githubusercontent.com/docker-library/redis/master/7.0/alpine/docker-entrypoint.sh; \
+    chmod +x /usr/local/bin/redis-entrypoint.sh; \
     wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
 	echo "$REDIS_DOWNLOAD_SHA *redis.tar.gz" | sha256sum -c -; \
 	mkdir -p /usr/src/redis; \
@@ -264,7 +266,7 @@ RUN chown redis:redis /data
 WORKDIR /data
 
 # COPY docker-entrypoint.sh /usr/local/bin/
-# ENTRYPOINT ["redis-entrypoint.sh"]
+ENTRYPOINT ["redis-entrypoint.sh"]
 
 EXPOSE 6379
 CMD ["redis-server"]
