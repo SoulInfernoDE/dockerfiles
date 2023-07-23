@@ -184,7 +184,7 @@ RUN set -eux; \
 # the following line has been replaced by the downloads from original repo
 # COPY *.sh upgrade.exclude /
 # using internal cp instead of COPY arg
-#COPY /config/* /usr/src/nextcloud/config/
+# COPY /config/* /usr/src/nextcloud/config/
 
 ENTRYPOINT ["/entrypoint-nextcloud.sh"]
 CMD ["php-fpm"]
@@ -198,7 +198,8 @@ CMD ["php-fpm"]
 # RUN addgroup -S -g 1000 redis \
 #    adduser -S -G redis -u 999 redis
 # alpine already has a gid 999, so we'll use the next id
-RUN	wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
+RUN	wget -O /usr/local/bin/redis-entrypoint.sh https://raw.githubusercontent.com/docker-library/redis/master/7.0/alpine/docker-entrypoint.sh; \
+    wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
 	echo "$REDIS_DOWNLOAD_SHA *redis.tar.gz" | sha256sum -c -; \
 	mkdir -p /usr/src/redis; \
 	tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1; \
@@ -265,7 +266,7 @@ RUN chown redis:redis /data
 WORKDIR /data
 
 # COPY docker-entrypoint.sh /usr/local/bin/
-# ENTRYPOINT ["docker-entrypoint.sh"]
+# ENTRYPOINT ["redis-entrypoint.sh"]
 
 EXPOSE 6379
 CMD ["redis-server"]
