@@ -29,6 +29,8 @@ RUN set -eux; \
 # add tzdata for https://github.com/docker-library/redis/issues/138
 	    tzdata \
         wget \
+        libraw \
+        libjpeg-turbo \
 
     ; \
 # pulling upgrade.exclude file from original nextcloud repo
