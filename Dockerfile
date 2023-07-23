@@ -182,7 +182,7 @@ RUN set -eux; \
 
 # the following line has been replaced by the downloads from original repo
 # COPY *.sh upgrade.exclude /
-COPY config/* /usr/src/nextcloud/config/
+COPY /config/* /usr/src/nextcloud/config/
 
 ENTRYPOINT ["/entrypoint-nextcloud.sh"]
 CMD ["php-fpm"]
