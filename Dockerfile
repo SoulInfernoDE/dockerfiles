@@ -1,5 +1,5 @@
 FROM nextcloud:fpm-alpine
-ADD https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude
+ADD https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude /
 # Nextcloud env
 ENV PHP_MEMORY_LIMIT 513M
 ENV PHP_UPLOAD_LIMIT 20G
