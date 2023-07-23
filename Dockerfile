@@ -1,5 +1,5 @@
 FROM nextcloud:fpm-alpine
-ADD https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude /
+# removed ADD command for lesser layers
 # Nextcloud env
 ENV PHP_MEMORY_LIMIT 513M
 ENV PHP_UPLOAD_LIMIT 20G
@@ -12,6 +12,8 @@ ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945
 # volumes for Nextcloud and redis
 VOLUME /var/www/html /data
 
+# Redis port
+EXPOSE 6379
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 # FROM php:8.2-fpm-alpine3.18
 # One Alpine base image layer should be enough and choosing the base of the nextcloud one seems to be reasonable for all others
@@ -29,6 +31,8 @@ RUN set -eux; \
         wget \
 
     ; \
+# pulling upgrade.exclude file from original nextcloud repo
+    wget -P / https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude; \
     \
     apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
@@ -178,16 +182,12 @@ RUN set -eux; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/smtp.config.php; \
     wget -P /config https://raw.githubusercontent.com/nextcloud/docker/master/27/fpm-alpine/config/swift.config.php; \
     cp -R /config/* /usr/src/nextcloud/config/; \
-    chmod +x /*.sh
-
+    chmod +x /*.sh; \
+# merging redis lines into one run command
 # the following line has been replaced by the downloads from original repo
 # COPY *.sh upgrade.exclude /
 # using internal cp instead of COPY arg
 # COPY /config/* /usr/src/nextcloud/config/
-
-ENTRYPOINT ["/nextcloud-entrypoint.sh"]
-CMD ["php-fpm"]
-
 
 # FROM mariadb:11.0.2
 
@@ -195,7 +195,7 @@ CMD ["php-fpm"]
 # FROM redis:alpine but using nextcloud alpine base image
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 # alpine already has a gid 999, so we'll use the next id
-RUN	addgroup -S -g 1001 redis; \
+    addgroup -S -g 1001 redis; \
     adduser -S -G redis -u 1000 redis; \
     wget -O /usr/local/bin/redis-entrypoint.sh https://raw.githubusercontent.com/docker-library/redis/master/7.0/alpine/docker-entrypoint.sh; \
     chmod +x /usr/local/bin/redis-entrypoint.sh; \
@@ -203,6 +203,7 @@ RUN	addgroup -S -g 1001 redis; \
 	echo "$REDIS_DOWNLOAD_SHA *redis.tar.gz" | sha256sum -c -; \
 	mkdir -p /usr/src/redis; \
     mkdir -p /data; \
+    chown redis:redis /data; \
 	tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1; \
 	rm redis.tar.gz; \
 	\
@@ -262,13 +263,13 @@ RUN	addgroup -S -g 1001 redis; \
 	redis-cli --version; \
 	redis-server --version
 
-# RUN mkdir /data \
-RUN chown redis:redis /data
 # WORKDIR /data
 
 # COPY docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["redis-entrypoint.sh"]
 
-EXPOSE 6379
-CMD ["redis-server"]
+ENTRYPOINT ["/nextcloud-entrypoint.sh", "redis-entrypoint.sh"]
+CMD ["php-fpm", "redis-server"]
+
+# ENTRYPOINT ["redis-entrypoint.sh"]
+# CMD ["redis-server"]
 # FROM nginx:latest
