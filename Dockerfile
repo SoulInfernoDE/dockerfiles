@@ -4,15 +4,13 @@ ADD https://raw.githubusercontent.com/nextcloud/docker/master/upgrade.exclude /
 ENV PHP_MEMORY_LIMIT 513M
 ENV PHP_UPLOAD_LIMIT 20G
 ENV NEXTCLOUD_VERSION 27.0.1
-
-
 # REDIS env
 ENV REDIS_VERSION 7.0.12
 ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-7.0.12.tar.gz
 ENV REDIS_DOWNLOAD_SHA 9dd83d5b278bb2bf0e39bfeb75c3e8170024edbaf11ba13b7037b2945cf48ab7
 
 # volumes for Nextcloud and redis
-VOLUME /var/www/html /redis
+VOLUME /var/www/html /data
 
 # DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
 # FROM php:8.2-fpm-alpine3.18
@@ -255,7 +253,7 @@ RUN	wget -O /usr/local/bin/redis-entrypoint.sh https://raw.githubusercontent.com
 	)"; \
 	apk add --no-network --virtual .redis-rundeps $runDeps; \
 	apk del --no-network .build-deps; \
-	apk del --no-network .fetch-deps; \
+	apk del --no-network .fetch-deps \
         ; \
 	\
 	redis-cli --version; \
