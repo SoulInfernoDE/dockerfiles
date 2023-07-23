@@ -21,5 +21,5 @@ if [ "$um" = '0022' ]; then
 	umask 0077
 fi
 
-exec "./nextcloud-entrypoint.sh"
+exec "/usr/local/bin/nextcloud-entrypoint.sh"
 
