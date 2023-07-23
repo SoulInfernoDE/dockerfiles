@@ -21,5 +21,6 @@ if [ "$um" = '0022' ]; then
 	umask 0077
 fi
 
-exec "redis-server; su-exec /usr/local/bin/nextcloud-entrypoint.sh"
+exec "redis-server"; \
+exec "/usr/local/bin/nextcloud-entrypoint.sh"
 
