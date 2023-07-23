@@ -268,7 +268,7 @@ RUN set -eux; \
 
 # COPY docker-entrypoint.sh /usr/local/bin/
 
-ENTRYPOINT ["/merged-entrypoint.sh"]
+ENTRYPOINT ["merged-entrypoint.sh"]
 CMD ["php-fpm", "redis-server"]
 
 # ENTRYPOINT ["redis-entrypoint.sh"]
