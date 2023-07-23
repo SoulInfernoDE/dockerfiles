@@ -202,6 +202,7 @@ RUN	addgroup -S -g 1001 redis; \
     wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
 	echo "$REDIS_DOWNLOAD_SHA *redis.tar.gz" | sha256sum -c -; \
 	mkdir -p /usr/src/redis; \
+    mkdir -p /data; \
 	tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1; \
 	rm redis.tar.gz; \
 	\
@@ -263,7 +264,7 @@ RUN	addgroup -S -g 1001 redis; \
 
 # RUN mkdir /data \
 RUN chown redis:redis /data
-WORKDIR /data
+# WORKDIR /data
 
 # COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["redis-entrypoint.sh"]
